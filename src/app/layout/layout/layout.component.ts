@@ -31,7 +31,7 @@ export class LayoutComponent implements OnInit {
 
 
   findBySegemnt(matric) {
-    this.findMatric(matric);
+    localStorage.setItem("matric",this.findMatric(matric));
     this.departmentCategory(matric);
     this.findByCustomers(matric);
     this.spinner.show();
@@ -72,18 +72,25 @@ export class LayoutComponent implements OnInit {
 
   getData(){
     this.monthData=[]
+    localStorage.setItem('matric1', this.findMatric(this.selMatric1));
+    localStorage.setItem('matric2', this.findMatric(this.selMatric2));
       this.dashboardService.getMatric1(this.selMatric1).subscribe((data:any)=>{
           // console.log(data)
           // this.matric1Data=data;
-          this.monthData.push({"matric1Data":data})
+          this.monthData.push({"matric1Data":data});
+          this.getMatric2();
       });
-      this.dashboardService.getMatric2(this.selMatric2).subscribe((data:any)=>{
-        // console.log(data)
-        // this.matric2Data=data;
-        this.monthData.push({"matric2Data":data})
-    });
     
 
+  }
+
+
+  getMatric2(){
+    this.dashboardService.getMatric2(this.selMatric2).subscribe((data:any)=>{
+      // console.log(data)
+      // this.matric2Data=data;
+      this.monthData.push({"matric2Data":data})
+  });
   }
 
   findMatric(matric) {
@@ -105,14 +112,13 @@ export class LayoutComponent implements OnInit {
         mat = "Sales"
         break;
       case 'price':
-        mat = "Price"
+        mat = "Unit Price"
         break;
-
       default:
         break;
     }
-
-    localStorage.setItem("matric",mat);
+return mat;
+    
   }
 
 }

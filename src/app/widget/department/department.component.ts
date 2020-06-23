@@ -96,7 +96,7 @@ export class DepartmentComponent implements OnInit {
           borderWidth: 0,
           dataLabels: {
             enabled: true,
-            format: '{point.y:.0f}'
+            format: localStorage.getItem('matric')==='Discount'?'{point.y:.0f}%':'{point.y:.0f}'
           }
         }
       },
@@ -120,8 +120,8 @@ export class DepartmentComponent implements OnInit {
           position: {
             verticalAlign: 'bottom',
             align: 'left',
-            x: 10,
-            y: -200,
+            x: 500,
+            y: -270,
           }
         },
         series: [

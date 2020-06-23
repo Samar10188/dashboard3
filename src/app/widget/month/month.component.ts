@@ -1,8 +1,11 @@
 import { Component, OnInit, Input, Output, OnChanges, EventEmitter, SimpleChanges } from '@angular/core';
-import * as Highcharts from 'highcharts';
+// import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
 import { DashboardService } from 'src/app/dashboard.service';
 import { NgxSpinnerService } from "ngx-spinner";
+declare var require: any;
+var Highcharts = require('highcharts'), 
+    HighchartsGroupedCategories = require('highcharts-grouped-categories')(Highcharts);
 
 @Component({
     selector: 'app-month',
@@ -20,12 +23,12 @@ export class MonthComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        // this.spinner.show();
-        // setTimeout(() => {
-        //     this.spinner.hide();
-        // }, 2000);
         console.log(this.monthData)
-        this.chartData();
+        if(this.monthData){
+            console.log("month")
+            this.chartData();
+        }
+        
     }
 
 
@@ -39,7 +42,7 @@ export class MonthComponent implements OnInit {
                 zoomType: 'xy'
             },
             title: {
-                text: "Discount" + ' vs ' + "this.selMatric2" + ' by Month'
+                text: localStorage.getItem('matric1') + ' vs ' + localStorage.getItem('matric2')  + ' by Month'
             },
             subtitle: {
                 // text: 'Source: WorldClimate.com'
@@ -48,12 +51,35 @@ export class MonthComponent implements OnInit {
                 enabled: false
             },
             xAxis: [{
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                categories: 
+                // [
+                //     {
+                //         name:"2011",
+                //         categories:['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                //     },
+                //     {
+                //         name:"2012",
+                //         categories:['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                //     },
+                //     {
+                //         name:"2013",
+                //         categories:['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                //     },
+                //     {
+                //         name:"2014",
+                //         categories:['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                //     }
+                // ],
+                
+                ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                crosshair: true
+                crosshair: true,
+                labels: {
+                    rotation: -90,
+                  }
             }],
             yAxis: [{ // Primary yAxis
                 labels: {
@@ -84,8 +110,10 @@ export class MonthComponent implements OnInit {
                 opposite: true
             }],
             tooltip: {
-                shared: true
-            },
+                shared:true,
+                // headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                // pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:,.2f}</b> of total<br/>'
+              },
             legend: {
                 enabled: false,
                 layout: 'horizontal',
@@ -104,7 +132,8 @@ export class MonthComponent implements OnInit {
                 yAxis: 1,
                 data: this.monthData[1].matric2Data.allYearData,
                 tooltip: {
-                    // valueSuffix: ' mm'
+                    // valueSuffix: ' mm',
+                    valueFormat:'{point.y:,.0f}'
                 }
 
             }, {
